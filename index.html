@@ -1,0 +1,320 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Factor38 | Kay-Kit</title>
+    <link rel="icon" type="image/png" href="https://i.ibb.co/yczM6Rzp/pixil-frame-0-50.png">
+    <script src="https://unpkg.com/react@18/umd/react.development.js"></script>
+    <script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+
+    <style>
+        :root { --bg: #f8f9fc; --card: #ffffff; --text: #1a202c; --primary: #0056b3; --accent: #00b4d8; }
+        body { font-family: 'Segoe UI', sans-serif; background: var(--bg); color: var(--text); margin: 0; transition: 0.4s; overflow: hidden; }
+        .app-shell { display: grid; grid-template-columns: 75px 1fr; height: 100vh; }
+        
+        .sidebar { background: var(--primary); display: flex; flex-direction: column; align-items: center; padding-top: 20px; gap: 15px; z-index: 100; box-shadow: 2px 0 10px rgba(0,0,0,0.1); }
+        .tool-btn { background: rgba(255,255,255,0.15); border: none; color: white; width: 55px; height: 55px; border-radius: 15px; cursor: pointer; font-size: 22px; transition: 0.2s; }
+        .tool-btn:hover { background: var(--accent); transform: scale(1.05); }
+        .tool-btn.active { background: white; color: var(--primary); }
+
+        .main-content { padding: 40px; display: flex; flex-direction: column; align-items: center; overflow-y: auto; position: relative; }
+        .quiz-card { background: var(--card); max-width: 650px; width: 100%; padding: 35px; border-radius: 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.08); border-top: 8px solid var(--primary); }
+        
+        .opt-btn { width: 100%; text-align: left; padding: 18px; margin: 12px 0; border: 2px solid #edf2f7; background: white; color: var(--text); cursor: pointer; border-radius: 12px; font-size: 16px; transition: 0.3s; }
+        .opt-btn:hover { border-color: var(--primary); background: #f0f7ff; }
+        .opt-btn.wrong { background: #fee2e2 !important; border-color: #ef4444 !important; color: #b91c1c !important; }
+        .opt-btn.correct { background: #dcfce7 !important; border-color: #22c55e !important; color: #166534 !important; font-weight: bold; transform: scale(1.02); }
+
+        .drawer { position: fixed; top: 0; right: -420px; width: 400px; height: 100%; background: var(--card); box-shadow: -10px 0 30px rgba(0,0,0,0.15); transition: 0.4s cubic-bezier(0.4, 0, 0.2, 1); z-index: 150; padding: 25px; overflow-y: auto; }
+        .drawer.open { right: 0; }
+
+        .calc-display { background: #1a202c; color: #00ffcc; padding: 20px; text-align: right; font-size: 24px; font-family: monospace; border-radius: 10px; margin-bottom: 10px; border: 2px solid var(--primary); min-height: 40px; word-break: break-all; }
+        .calc-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; }
+        .calc-grid button { padding: 15px; border: none; border-radius: 8px; background: #edf2f7; font-weight: bold; cursor: pointer; }
+        .btn-equal { background: var(--primary) !important; color: white !important; grid-column: span 2; }
+
+        .theme-grid { display: grid; grid-template-columns: 1fr; gap: 8px; }
+        .theme-item { display: flex; align-items: center; gap: 12px; padding: 10px; border-radius: 8px; cursor: pointer; border: 1px solid #eee; transition: 0.2s; }
+        
+        #canvas-area { border: 2px dashed #cbd5e0; background: white; cursor: crosshair; border-radius: 12px; touch-action: none; display: block; margin: 10px 0; }
+        footer { margin-top: 30px; font-weight: bold; color: var(--primary); }
+    </style>
+</head>
+<body>
+    <div id="root"></div>
+
+    <script type="text/babel">
+        const THEMES_DB = [
+    // --- COLEÇÃO DARK & NEON ---
+    { n: "Neon Pulse", bg: "#090909", pri: "#bcff00", txt: "#000000" },
+    { n: "Cyber Orchid", bg: "#1a0b1a", pri: "#f72585", txt: "#000000" },
+    { n: "Deep Navy", bg: "#000814", pri: "#ffc300", txt: "#000000" },
+    { n: "Phantom Red", bg: "#160000", pri: "#ff0000", txt: "#000000" },
+    { n: "Bio Hazard", bg: "#0d130d", pri: "#39ff14", txt: "#000000" },
+    { n: "Abyssal Blue", bg: "#011627", pri: "#4cc9f0", txt: "#000000" },
+    { n: "Shadow Gold", bg: "#141414", pri: "#d4af37", txt: "#000000" },
+    { n: "Void Purple", bg: "#10002b", pri: "#e0aaff", txt: "#000000" },
+    { n: "Carbon Blue", bg: "#1b263b", pri: "#e0e1dd", txt: "#000000" },
+    { n: "Crimson Tide", bg: "#2b0000", pri: "#ef233c", txt: "#000000" },
+
+    // --- COLEÇÃO ELEMENTAL ---
+    { n: "Magma Flow", bg: "#370617", pri: "#faa307", txt: "#000000" },
+    { n: "Frozen Tundra", bg: "#03045e", pri: "#caf0f8", txt: "#000000" },
+    { n: "Earth Core", bg: "#283618", pri: "#dda15e", txt: "#000000" },
+    { n: "Thunder Storm", bg: "#1e1e24", pri: "#fffbfe", txt: "#000000" },
+    { n: "Desert Night", bg: "#22223b", pri: "#c9ada7", txt: "#000000" },
+    { n: "Ocean Trench", bg: "#001219", pri: "#94d2bd", txt: "#000000" },
+    { n: "Forest Canopy", bg: "#132a13", pri: "#90a955", txt: "#000000" },
+    { n: "Solar Flare", bg: "#6a040f", pri: "#ffba08", txt: "#000000" },
+    { n: "Lunar Dust", bg: "#2b2d42", pri: "#8d99ae", txt: "#000000" },
+    { n: "Tropic Teal", bg: "#006d77", pri: "#e29578", txt: "#000000" },
+
+    // --- COLEÇÃO VINTAGE & RETRO ---
+    { n: "80s Arcade", bg: "#2d00f7", pri: "#ff00ff", txt: "#000000" },
+    { n: "Old Cassette", bg: "#3d314a", pri: "#f9844a", txt: "#000000" },
+    { n: "Polaroid Dark", bg: "#264653", pri: "#e9c46a", txt: "#000000" },
+    { n: "Gothic Victorian", bg: "#1a1a1a", pri: "#800000", txt: "#000000" },
+    { n: "Sepia Noir", bg: "#2b1d0e", pri: "#d4a373", txt: "#000000" },
+    { n: "Vaporwave Night", bg: "#120458", pri: "#ff71ce", txt: "#000000" },
+    { n: "Classic Blueprint", bg: "#002855", pri: "#9cc4e4", txt: "#000000" },
+    { n: "Noir Film", bg: "#ffffff", pri: "#000000", txt: "#000000" },
+    { n: "Steampunk", bg: "#3c2f2f", pri: "#be9b7b", txt: "#000000" },
+    { n: "Disco Inferno", bg: "#480ca8", pri: "#4cc9f0", txt: "#000000" },
+
+    // --- COLEÇÃO MODERN & MINIMAL ---
+    { n: "Slate Professional", bg: "#0f172a", pri: "#38bdf8", txt: "#000000" },
+    { n: "Royal Emerald", bg: "#022c22", pri: "#10b981", txt: "#000000" },
+    { n: "Wine Cellar", bg: "#4c0519", pri: "#fb7185", txt: "#000000" },
+    { n: "Deep Graphite", bg: "#18181b", pri: "#a1a1aa", txt: "#000000" },
+    { n: "Indigo Ink", bg: "#1e1b4b", pri: "#818cf8", txt: "#000000" },
+    { n: "Amazon Mud", bg: "#2d2a2e", pri: "#ffd866", txt: "#000000" },
+    { n: "Space Grey", bg: "#343a40", pri: "#f8f9fa", txt: "#000000" },
+    { n: "Military Ops", bg: "#25291c", pri: "#a3b18a", txt: "#000000" },
+    { n: "Deep Royal", bg: "#14213d", pri: "#fca311", txt: "#000000" },
+    { n: "Midnight Moss", bg: "#0b130e", pri: "#70e000", txt: "#000000" },
+
+    // --- COLEÇÃO SOFT ---
+    { n: "Cozy Night", bg: "#2b2d42", pri: "#ef233c", txt: "#000000" },
+    { n: "Plum Jam", bg: "#2d0032", pri: "#ff85a1", txt: "#000000" },
+    { n: "Blueberry", bg: "#1a2a6c", pri: "#f5af19", txt: "#000000" },
+    { n: "Evergreen", bg: "#064e3b", pri: "#ecfdf5", txt: "#000000" },
+    { n: "Velvet Black", bg: "#0a0a0a", pri: "#9d0208", txt: "#000000" },
+    { n: "Obsidian Lake", bg: "#0d1b2a", pri: "#415a77", txt: "#000000" },
+    { n: "Galaxy Dust", bg: "#161a1d", pri: "#a4161a", txt: "#000000" },
+    { n: "Stormy Sea", bg: "#212529", pri: "#34a0a4", txt: "#000000" },
+    { n: "Iron Man", bg: "#780000", pri: "#ffc300", txt: "#000000" },
+    { n: "Neon Mint", bg: "#000000", pri: "#00ffcc", txt: "#000000" }
+];
+
+       const QUESTOES = [
+    { q: "(OBMEP) Qual é a soma dos algarismos do número 10^15 - 15?", opts: ["120", "130", "135", "144"], ans: "130", ref: "Díficil - Lógica" },
+    { q: "Se o amanhã de ontem era quinta, que dia é o ontem de amanhã?", opts: ["Quarta", "Quinta", "Sexta", "Sábado"], ans: "Quinta", ref: "Fácil - Raciocínio" },
+    { q: "(OBMEP) Quantos segundos existem em 2 horas e 20 minutos?", opts: ["7200", "8400", "4800", "9600"], ans: "8400", ref: "Média - Aritmética" },
+    { q: "A soma de três números consecutivos é 33. Qual o maior deles?", opts: ["10", "11", "12", "13"], ans: "12", ref: "Fácil - Álgebra" },
+    { q: "(OBMEP) Quantos algarismos 9 existem entre 1 e 100?", opts: ["10", "19", "20", "21"], ans: "20", ref: "Difícil - Contagem" },
+    { q: "(OBMEP) Uma caixa tem 5 bolas pretas e 5 brancas. Quantas devo tirar para ter certeza de ter um par de cores iguais?", opts: ["2", "3", "5", "6"], ans: "3", ref: "Média - Probabilidade" },
+    { q: "Qual o próximo número da sequência: 2, 4, 8, 16...?", opts: ["24", "30", "32", "64"], ans: "32", ref: "Fácil - Padrões" },
+    { q: "Se 2^x = 128, qual o valor de x?", opts: ["5", "6", "7", "8"], ans: "7", ref: "Média - Potência" },
+    { q: "Um relógio atrasa 2 min a cada hora. Em 12 horas, quanto ele atrasou?", opts: ["20 min", "24 min", "12 min", "1 hora"], ans: "24 min", ref: "Fácil - Tempo" },
+    { q: "Qual a raiz quadrada da raiz quadrada de 16?", opts: ["4", "2", "8", "1"], ans: "2", ref: "Média - Raízes" },
+    { q: "(OBMEP) Um decágono possui quantos lados?", opts: ["8", "10", "12", "20"], ans: "10", ref: "Fácil - Geometria" },
+    { q: "Se 3/4 de um número é 60, qual é esse número?", opts: ["45", "75", "80", "90"], ans: "80", ref: "Média - Fração" },
+    { q: "Quantos números pares de dois algarismos existem?", opts: ["45", "50", "44", "90"], ans: "45", ref: "Média - Contagem" },
+    { q: "O dobro de um número somado a 15 é 45. Que número é esse?", opts: ["10", "15", "20", "30"], ans: "15", ref: "Fácil - Álgebra" },
+    { q: "(OBMEP) Qual é a área de um quadrado cujo perímetro é 24 cm?", opts: ["24", "36", "48", "64"], ans: "36", ref: "Média - Geometria" },
+    { q: "Se x + y = 10 e x - y = 4, qual o valor de x?", opts: ["5", "6", "7", "8"], ans: "7", ref: "Média - Álgebra" },
+    { q: "Qual o valor de 0,5 multiplicado por 0,5?", opts: ["1", "0,25", "0,5", "0,1"], ans: "0,25", ref: "Fácil - Aritmética" },
+    { q: "Quantos minutos há em uma semana?", opts: ["10080", "1440", "7200", "8640"], ans: "10080", ref: "Difícil - Aritmética" },
+    { q: "(OBMEP) Uma formiga anda 3m para o Norte e 4m para o Leste. Qual a distância dela ao ponto inicial?", opts: ["5m", "7m", "1m", "12m"], ans: "5m", ref: "Média - Geometria" },
+    { q: "Em uma corrida, se você ultrapassa o segundo colocado, em que lugar você fica?", opts: ["Primeiro", "Segundo", "Terceiro", "Último"], ans: "Segundo", ref: "Fácil - Lógica" },
+    { q: "Qual o maior número primo menor que 20?", opts: ["17", "18", "19", "21"], ans: "19", ref: "Fácil - Aritmética" },
+    { q: "Quantas faces tem um cubo?", opts: ["4", "6", "8", "12"], ans: "6", ref: "Fácil - Geometria" },
+    { q: "Se um tijolo pesa 1kg mais meio tijolo, quanto pesa um tijolo?", opts: ["1,5kg", "2kg", "2,5kg", "3kg"], ans: "2kg", ref: "Difícil - Lógica" },
+    { q: "(OBMEP) Qual o MDC de 12 e 18?", opts: ["2", "3", "6", "12"], ans: "6", ref: "Média - Aritmética" },
+    { q: "O triplo de 25% de 80 é?", opts: ["20", "40", "60", "80"], ans: "60", ref: "Média - Porcentagem" },
+    { q: "Quantos meses têm 28 dias?", opts: ["1", "2", "6", "12"], ans: "12", ref: "Médio - Pegadinha" },
+    { q: "Se João tem 3 irmãs e cada irmã tem 2 irmãos, quantos filhos o pai de João tem?", opts: ["4", "5", "6", "9"], ans: "4", ref: "Difícil - Lógica" },
+    { q: "Qual o valor de (2+2)x2-2?", opts: ["2", "4", "6", "8"], ans: "6", ref: "Fácil - Aritmética" },
+    { q: "Em um triângulo retângulo, se os catetos medem 6 e 8, a hipotenusa mede?", opts: ["10", "12", "14", "100"], ans: "10", ref: "Média - Geometria" },
+    { q: "Quantos divisores tem o número 10?", opts: ["2", "3", "4", "5"], ans: "4", ref: "Fácil - Aritmética" },
+    { q: "Qual o ângulo interno de um quadrado?", opts: ["45°", "90°", "180°", "360°"], ans: "90°", ref: "Fácil - Geometria" },
+    { q: "Se x/5 = 12, qual o valor de x?", opts: ["40", "50", "60", "70"], ans: "60", ref: "Fácil - Álgebra" },
+    { q: "Quantos mililitros há em 2,5 litros?", opts: ["250", "2500", "25000", "25"], ans: "2500", ref: "Fácil - Medidas" },
+    { q: "Qual a negação de 'Todos os gatos são pretos'?", opts: ["Nenhum gato é preto", "Algum gato não é preto", "Todos os gatos são brancos", "Gatos não existem"], ans: "Algum gato não é preto", ref: "Média - Lógica" },
+    { q: "O que pesa mais: 1kg de chumbo ou 1kg de algodão?", opts: ["Chumbo", "Algodão", "Pesam o mesmo", "Depende do volume"], ans: "Pesam o mesmo", ref: "Fácil - Lógica" },
+    { q: "Se um ângulo mede 30°, seu complementar mede?", opts: ["60°", "90°", "150°", "180°"], ans: "60°", ref: "Média - Geometria" },
+    { q: "Qual o resultado de 100 dividido por 0,5?", opts: ["50", "100", "200", "500"], ans: "200", ref: "Média - Aritmética" },
+    { q: "(OBMEP) Um polígono de 5 lados é um?", opts: ["Hexágono", "Pentágono", "Heptágono", "Losango"], ans: "Pentágono", ref: "Fácil - Geometria" },
+    { q: "Quanto é 7 x 8?", opts: ["54", "56", "64", "62"], ans: "56", ref: "Fácil - Tabuada" },
+    { q: "Se f(x) = 2x + 3, qual o valor de f(5)?", opts: ["10", "13", "15", "18"], ans: "13", ref: "Média - Funções" },
+    { q: "Qual a soma dos ângulos internos de um triângulo?", opts: ["90°", "180°", "270°", "360°"], ans: "180°", ref: "Fácil - Geometria" },
+    { q: "Qual o valor de 5!", opts: ["25", "60", "120", "150"], ans: "120", ref: "Média - Fatorial" },
+    { q: "Se você lançar um dado, qual a chance de sair um número par?", opts: ["1/6", "1/3", "1/2", "2/3"], ans: "1/2", ref: "Fácil - Probabilidade" },
+    { q: "Quantos zeros existem no número um milhão?", opts: ["5", "6", "7", "8"], ans: "6", ref: "Fácil - Aritmética" },
+    { q: "Qual o valor de pi aproximado?", opts: ["3,12", "3,14", "3,16", "3,20"], ans: "3,14", ref: "Fácil - Geometria" },
+    { q: "O sucessor do dobro de 9 é?", opts: ["18", "19", "20", "21"], ans: "19", ref: "Fácil - Aritmética" },
+    { q: "Qual a metade de 2 mais 2?", opts: ["2", "3", "4", "1"], ans: "3", ref: "Médio - Raciocínio" },
+    { q: "Quantos lados tem um heptágono?", opts: ["6", "7", "8", "9"], ans: "7", ref: "Fácil - Geometria" },
+    { q: "Se um carro faz 10km/l, quantos litros gasta em 150km?", opts: ["10", "15", "20", "25"], ans: "15", ref: "Fácil - Razão" },
+    { q: "Qual o valor de x na equação 2x - 4 = 10?", opts: ["5", "6", "7", "8"], ans: "7", ref: "Fácil - Álgebra" }
+];
+
+        function App() {
+            const [aba, setAba] = React.useState(null);
+            const [calc, setCalc] = React.useState("");
+            const [qIdx, setQIdx] = React.useState(0);
+            const [erros, setErros] = React.useState([]);
+            const [correto, setCorreto] = React.useState(false);
+            const [notas, setNotas] = React.useState("");
+            const drawing = React.useRef(false);
+
+            // FUNÇÕES DO DESENHO CORRIGIDAS
+            const startDrawing = (e) => {
+                drawing.current = true;
+                draw(e);
+            };
+
+            const stopDrawing = () => {
+                drawing.current = false;
+                const canvas = document.getElementById('canvas-area');
+                const ctx = canvas.getContext('2d');
+                ctx.beginPath();
+            };
+
+            const draw = (e) => {
+                if (!drawing.current) return;
+                const canvas = document.getElementById('canvas-area');
+                const ctx = canvas.getContext('2d');
+                const rect = canvas.getBoundingClientRect();
+                
+                // Pega coordenadas de mouse ou touch
+                const clientX = e.clientX || (e.touches && e.touches[0].clientX);
+                const clientY = e.clientY || (e.touches && e.touches[0].clientY);
+                
+                const x = clientX - rect.left;
+                const y = clientY - rect.top;
+
+                ctx.lineWidth = 3;
+                ctx.lineCap = 'round';
+                ctx.strokeStyle = getComputedStyle(document.documentElement).getPropertyValue('--primary');
+
+                ctx.lineTo(x, y);
+                ctx.stroke();
+                ctx.beginPath();
+                ctx.moveTo(x, y);
+            };
+
+            const handleCalc = (val) => {
+                if (calc === "Erro") { setCalc(val === "C" ? "" : val); return; }
+                if (val === "C") setCalc("");
+                else if (val === "⌫") setCalc(calc.slice(0, -1));
+                else if (val === "=") {
+                    try {
+                        let exp = calc.replace(/x/g, "*").replace(/:/g, "/").replace(/\^/g, "**");
+                        setCalc(String(eval(exp)));
+                    } catch { setCalc("Erro"); }
+                } else setCalc(prev => prev + val);
+            };
+
+            const responder = (opt) => {
+                if (correto) return;
+                if (opt === QUESTOES[qIdx].ans) {
+                    setCorreto(true);
+                    setTimeout(() => {
+                        setQIdx((prev) => (prev + 1) % QUESTOES.length);
+                        setErros([]);
+                        setCorreto(false);
+                    }, 2000);
+                } else {
+                    if (!erros.includes(opt)) setErros([...erros, opt]);
+                }
+            };
+
+            const mudarTema = (t) => {
+                const r = document.documentElement;
+                r.style.setProperty('--bg', t.bg);
+                r.style.setProperty('--primary', t.pri);
+                r.style.setProperty('--text', t.txt);
+            };
+
+            return (
+                <div className="app-shell">
+                    <aside className="sidebar">
+                        <button className={`tool-btn ${aba==='calc'?'active':''}`} onClick={()=>setAba(aba==='calc'?null:'calc')}>🖩</button>
+                        <button className={`tool-btn ${aba==='draw'?'active':''}`} onClick={()=>setAba(aba==='draw'?null:'draw')}>✎</button>
+                        <button className={`tool-btn ${aba==='note'?'active':''}`} onClick={()=>setAba(aba==='note'?null:'note')}>📝</button>
+                        <button className={`tool-btn ${aba==='theme'?'active':''}`} onClick={()=>setAba(aba==='theme'?null:'theme')}>🎨</button>
+                    </aside>
+
+                    <main className="main-content">
+                        <div className="quiz-card">
+                            <div style={{display:'flex', justifyContent:'space-between', marginBottom:10}}>
+                                <small style={{color: 'var(--primary)', fontWeight: 'bold'}}>{QUESTOES[qIdx].ref}</small>
+                                <small>Questão {qIdx + 1} de {QUESTOES.length}</small>
+                            </div>
+                            <h2>{QUESTOES[qIdx].q}</h2>
+                            {QUESTOES[qIdx].opts.map(o => (
+                                <button key={o} 
+                                    className={`opt-btn ${erros.includes(o) ? 'wrong' : ''} ${correto && o === QUESTOES[qIdx].ans ? 'correct' : ''}`}
+                                    onClick={() => responder(o)}>{o}</button>
+                            ))}
+                            {correto && <p style={{color: '#22c55e', textAlign: 'center', fontWeight: 'bold'}}>✨ Mandou bem, Kay-Kit!</p>}
+                        </div>
+                        <footer>Desenvolvido por Kay-Kit</footer>
+                    </main>
+
+                    {/* GAVETA DESENHO CORRIGIDA */}
+                    <div className={`drawer ${aba==='draw'?'open':''}`}>
+                        <h3>Rascunho de Geometria</h3>
+                        <canvas id="canvas-area" width="350" height="400" 
+                            onMouseDown={startDrawing}
+                            onMouseMove={draw}
+                            onMouseUp={stopDrawing}
+                            onMouseLeave={stopDrawing}
+                            onTouchStart={startDrawing}
+                            onTouchMove={draw}
+                            onTouchEnd={stopDrawing}
+                        />
+                        <button className="opt-btn" onClick={() => {
+                            const c = document.getElementById('canvas-area');
+                            c.getContext('2d').clearRect(0,0,c.width,c.height);
+                        }}>Limpar Tudo</button>
+                    </div>
+
+                    <div className={`drawer ${aba==='calc'?'open':''}`}>
+                        <h3>Calculadora Científica</h3>
+                        <div className="calc-display">{calc || "0"}</div>
+                        <div className="calc-grid">
+                            {["^","⌫","C",":","x","7","8","9","-","4","5","6","+","1","2","3","0",".","="].map(b => (
+                                <button key={b} className={b==="="?"btn-equal":""} onClick={()=>handleCalc(b)}>{b}</button>
+                            ))}
+                        </div>
+                    </div>
+
+                    <div className={`drawer ${aba==='note'?'open':''}`}>
+                        <h3>Bloco de Notas</h3>
+                        <textarea style={{width:'100%', height:'350px', padding:'15px', borderRadius:'10px', background:'#fffdf2'}} 
+                                  value={notas} onChange={(e)=>setNotas(e.target.value)} placeholder="Kay-Kit, escreva aqui..."></textarea>
+                    </div>
+
+                    <div className={`drawer ${aba==='theme'?'open':''}`}>
+                        <h3>Temas Kay-Kit</h3>
+                        <div className="theme-grid">
+                            {THEMES_DB.map((t, i) => (
+                                <div key={i} className="theme-item" onClick={() => mudarTema(t)}>
+                                    <div style={{width:20, height:20, borderRadius:'50%', background:t.pri, border:'2px solid white'}}></div>
+                                    <span style={{color: 'black'}}>{t.n}</span>
+                                </div>
+                            ))}
+                        </div>
+                    </div>
+                </div>
+            );
+        }
+
+        ReactDOM.createRoot(document.getElementById("root")).render(<App />);
+    </script>
+</body>
+</html>
