@@ -109,56 +109,106 @@
 ];
 
        const QUESTOES = [
-    { q: "(OBMEP) Qual é a soma dos algarismos do número 10^15 - 15?", opts: ["120", "130", "135", "144"], ans: "130", ref: "Díficil - Lógica" },
-    { q: "Se o amanhã de ontem era quinta, que dia é o ontem de amanhã?", opts: ["Quarta", "Quinta", "Sexta", "Sábado"], ans: "Quinta", ref: "Fácil - Raciocínio" },
-    { q: "(OBMEP) Quantos segundos existem em 2 horas e 20 minutos?", opts: ["7200", "8400", "4800", "9600"], ans: "8400", ref: "Média - Aritmética" },
-    { q: "A soma de três números consecutivos é 33. Qual o maior deles?", opts: ["10", "11", "12", "13"], ans: "12", ref: "Fácil - Álgebra" },
-    { q: "(OBMEP) Quantos algarismos 9 existem entre 1 e 100?", opts: ["10", "19", "20", "21"], ans: "20", ref: "Difícil - Contagem" },
-    { q: "(OBMEP) Uma caixa tem 5 bolas pretas e 5 brancas. Quantas devo tirar para ter certeza de ter um par de cores iguais?", opts: ["2", "3", "5", "6"], ans: "3", ref: "Média - Probabilidade" },
-    { q: "Qual o próximo número da sequência: 2, 4, 8, 16...?", opts: ["24", "30", "32", "64"], ans: "32", ref: "Fácil - Padrões" },
-    { q: "Se 2^x = 128, qual o valor de x?", opts: ["5", "6", "7", "8"], ans: "7", ref: "Média - Potência" },
-    { q: "Um relógio atrasa 2 min a cada hora. Em 12 horas, quanto ele atrasou?", opts: ["20 min", "24 min", "12 min", "1 hora"], ans: "24 min", ref: "Fácil - Tempo" },
-    { q: "Qual a raiz quadrada da raiz quadrada de 16?", opts: ["4", "2", "8", "1"], ans: "2", ref: "Média - Raízes" },
-    { q: "(OBMEP) Um decágono possui quantos lados?", opts: ["8", "10", "12", "20"], ans: "10", ref: "Fácil - Geometria" },
-    { q: "Se 3/4 de um número é 60, qual é esse número?", opts: ["45", "75", "80", "90"], ans: "80", ref: "Média - Fração" },
-    { q: "Quantos números pares de dois algarismos existem?", opts: ["45", "50", "44", "90"], ans: "45", ref: "Média - Contagem" },
-    { q: "O dobro de um número somado a 15 é 45. Que número é esse?", opts: ["10", "15", "20", "30"], ans: "15", ref: "Fácil - Álgebra" },
-    { q: "(OBMEP) Qual é a área de um quadrado cujo perímetro é 24 cm?", opts: ["24", "36", "48", "64"], ans: "36", ref: "Média - Geometria" },
-    { q: "Se x + y = 10 e x - y = 4, qual o valor de x?", opts: ["5", "6", "7", "8"], ans: "7", ref: "Média - Álgebra" },
-    { q: "Qual o valor de 0,5 multiplicado por 0,5?", opts: ["1", "0,25", "0,5", "0,1"], ans: "0,25", ref: "Fácil - Aritmética" },
-    { q: "Quantos minutos há em uma semana?", opts: ["10080", "1440", "7200", "8640"], ans: "10080", ref: "Difícil - Aritmética" },
-    { q: "(OBMEP) Uma formiga anda 3m para o Norte e 4m para o Leste. Qual a distância dela ao ponto inicial?", opts: ["5m", "7m", "1m", "12m"], ans: "5m", ref: "Média - Geometria" },
-    { q: "Em uma corrida, se você ultrapassa o segundo colocado, em que lugar você fica?", opts: ["Primeiro", "Segundo", "Terceiro", "Último"], ans: "Segundo", ref: "Fácil - Lógica" },
-    { q: "Qual o maior número primo menor que 20?", opts: ["17", "18", "19", "21"], ans: "19", ref: "Fácil - Aritmética" },
-    { q: "Quantas faces tem um cubo?", opts: ["4", "6", "8", "12"], ans: "6", ref: "Fácil - Geometria" },
-    { q: "Se um tijolo pesa 1kg mais meio tijolo, quanto pesa um tijolo?", opts: ["1,5kg", "2kg", "2,5kg", "3kg"], ans: "2kg", ref: "Difícil - Lógica" },
-    { q: "(OBMEP) Qual o MDC de 12 e 18?", opts: ["2", "3", "6", "12"], ans: "6", ref: "Média - Aritmética" },
-    { q: "O triplo de 25% de 80 é?", opts: ["20", "40", "60", "80"], ans: "60", ref: "Média - Porcentagem" },
-    { q: "Quantos meses têm 28 dias?", opts: ["1", "2", "6", "12"], ans: "12", ref: "Médio - Pegadinha" },
-    { q: "Se João tem 3 irmãs e cada irmã tem 2 irmãos, quantos filhos o pai de João tem?", opts: ["4", "5", "6", "9"], ans: "4", ref: "Difícil - Lógica" },
-    { q: "Qual o valor de (2+2)x2-2?", opts: ["2", "4", "6", "8"], ans: "6", ref: "Fácil - Aritmética" },
-    { q: "Em um triângulo retângulo, se os catetos medem 6 e 8, a hipotenusa mede?", opts: ["10", "12", "14", "100"], ans: "10", ref: "Média - Geometria" },
-    { q: "Quantos divisores tem o número 10?", opts: ["2", "3", "4", "5"], ans: "4", ref: "Fácil - Aritmética" },
-    { q: "Qual o ângulo interno de um quadrado?", opts: ["45°", "90°", "180°", "360°"], ans: "90°", ref: "Fácil - Geometria" },
-    { q: "Se x/5 = 12, qual o valor de x?", opts: ["40", "50", "60", "70"], ans: "60", ref: "Fácil - Álgebra" },
-    { q: "Quantos mililitros há em 2,5 litros?", opts: ["250", "2500", "25000", "25"], ans: "2500", ref: "Fácil - Medidas" },
-    { q: "Qual a negação de 'Todos os gatos são pretos'?", opts: ["Nenhum gato é preto", "Algum gato não é preto", "Todos os gatos são brancos", "Gatos não existem"], ans: "Algum gato não é preto", ref: "Média - Lógica" },
-    { q: "O que pesa mais: 1kg de chumbo ou 1kg de algodão?", opts: ["Chumbo", "Algodão", "Pesam o mesmo", "Depende do volume"], ans: "Pesam o mesmo", ref: "Fácil - Lógica" },
-    { q: "Se um ângulo mede 30°, seu complementar mede?", opts: ["60°", "90°", "150°", "180°"], ans: "60°", ref: "Média - Geometria" },
-    { q: "Qual o resultado de 100 dividido por 0,5?", opts: ["50", "100", "200", "500"], ans: "200", ref: "Média - Aritmética" },
-    { q: "(OBMEP) Um polígono de 5 lados é um?", opts: ["Hexágono", "Pentágono", "Heptágono", "Losango"], ans: "Pentágono", ref: "Fácil - Geometria" },
-    { q: "Quanto é 7 x 8?", opts: ["54", "56", "64", "62"], ans: "56", ref: "Fácil - Tabuada" },
-    { q: "Se f(x) = 2x + 3, qual o valor de f(5)?", opts: ["10", "13", "15", "18"], ans: "13", ref: "Média - Funções" },
-    { q: "Qual a soma dos ângulos internos de um triângulo?", opts: ["90°", "180°", "270°", "360°"], ans: "180°", ref: "Fácil - Geometria" },
-    { q: "Qual o valor de 5!", opts: ["25", "60", "120", "150"], ans: "120", ref: "Média - Fatorial" },
-    { q: "Se você lançar um dado, qual a chance de sair um número par?", opts: ["1/6", "1/3", "1/2", "2/3"], ans: "1/2", ref: "Fácil - Probabilidade" },
-    { q: "Quantos zeros existem no número um milhão?", opts: ["5", "6", "7", "8"], ans: "6", ref: "Fácil - Aritmética" },
-    { q: "Qual o valor de pi aproximado?", opts: ["3,12", "3,14", "3,16", "3,20"], ans: "3,14", ref: "Fácil - Geometria" },
-    { q: "O sucessor do dobro de 9 é?", opts: ["18", "19", "20", "21"], ans: "19", ref: "Fácil - Aritmética" },
-    { q: "Qual a metade de 2 mais 2?", opts: ["2", "3", "4", "1"], ans: "3", ref: "Médio - Raciocínio" },
-    { q: "Quantos lados tem um heptágono?", opts: ["6", "7", "8", "9"], ans: "7", ref: "Fácil - Geometria" },
-    { q: "Se um carro faz 10km/l, quantos litros gasta em 150km?", opts: ["10", "15", "20", "25"], ans: "15", ref: "Fácil - Razão" },
-    { q: "Qual o valor de x na equação 2x - 4 = 10?", opts: ["5", "6", "7", "8"], ans: "7", ref: "Fácil - Álgebra" }
+  { q: "Qual a soma dos ângulos internos de um hexágono regular?", opts: ["360°", "540°", "720°", "900°"], ans: "720°", ref: "Média - Geometria" },
+
+  { q: "Se 5 máquinas produzem 5 parafusos em 5 minutos, quanto tempo 100 máquinas levam para fazer 100 parafusos?", opts: ["100 min", "50 min", "5 min", "1 min"], ans: "5 min", ref: "Difícil - Lógica" },
+
+  { q: "Qual o valor de 9² - 8²?", opts: ["1", "17", "18", "81"], ans: "17", ref: "Fácil - Aritmética" },
+
+  { q: "Quantos graus tem um ângulo reto?", opts: ["45°", "90°", "180°", "360°"], ans: "90°", ref: "Fácil - Geometria" },
+
+  { q: "Um número x multiplicado por 0,2 é igual a 10. Qual o valor de x?", opts: ["2", "20", "50", "100"], ans: "50", ref: "Média - Álgebra" },
+
+  { q: "Qual a terça parte de 150?", opts: ["30", "45", "50", "60"], ans: "50", ref: "Fácil - Aritmética" },
+
+  { q: "Quantas horas há em 3 dias?", opts: ["36", "48", "72", "84"], ans: "72", ref: "Fácil - Medidas" },
+
+  { q: "Se f(x) = x² - 1, quanto é f(4)?", opts: ["7", "15", "16", "17"], ans: "15", ref: "Média - Funções" },
+
+  { q: "Qual o MMC de 4 e 6?", opts: ["10", "12", "24", "48"], ans: "12", ref: "Fácil - Aritmética" },
+
+  { q: "Em um baralho de 52 cartas, qual a chance de tirar um Ás?", opts: ["1/13", "1/52", "4/13", "1/4"], ans: "1/13", ref: "Média - Probabilidade" },
+
+  { q: "Qual o valor de x em: 3(x + 2) = 15?", opts: ["1", "3", "5", "9"], ans: "3", ref: "Média - Álgebra" },
+
+  { q: "Quantos lados tem um dodecágono?", opts: ["10", "12", "15", "20"], ans: "12", ref: "Fácil - Geometria" },
+
+  { q: "Qual a raiz quadrada de 144?", opts: ["10", "12", "14", "16"], ans: "12", ref: "Fácil - Raízes" },
+
+  { q: "Quanto é 15% de 200?", opts: ["15", "20", "30", "45"], ans: "30", ref: "Fácil - Porcentagem" },
+
+  { q: "O que é um triângulo isósceles?", opts: ["3 lados iguais", "2 lados iguais", "Nenhum lado igual", "Um ângulo de 90°"], ans: "2 lados iguais", ref: "Fácil - Geometria" },
+
+  { q: "Qual o próximo número: 1, 1, 2, 3, 5, 8...?", opts: ["10", "12", "13", "15"], ans: "13", ref: "Média - Fibonacci" },
+
+  { q: "Quantos minutos tem 1,5 hora?", opts: ["60", "75", "90", "100"], ans: "90", ref: "Fácil - Medidas" },
+
+  { q: "Se um quilo de carne custa R$ 40, quanto custa 250g?", opts: ["R$ 5", "R$ 10", "R$ 15", "R$ 20"], ans: "R$ 10", ref: "Fácil - Proporção" },
+
+  { q: "Qual o valor de 0 dividido por 5?", opts: ["0", "5", "Indeterminado", "1"], ans: "0", ref: "Fácil - Aritmética" },
+
+  { q: "Qual o volume de um cubo de lado 3cm?", opts: ["9cm³", "18cm³", "27cm³", "81cm³"], ans: "27cm³", ref: "Média - Geometria" },
+
+  { q: "Quantos segundos há em 5 minutos?", opts: ["150", "300", "500", "600"], ans: "300", ref: "Fácil - Medidas" },
+
+  { q: "Qual o valor de |-5| + 3?", opts: ["-2", "2", "8", "15"], ans: "8", ref: "Fácil - Aritmética" },
+
+  { q: "Se x² = 49 e x > 0, qual o valor de x?", opts: ["-7", "0", "7", "49"], ans: "7", ref: "Fácil - Álgebra" },
+
+  { q: "Qual o nome de um polígono de 8 lados?", opts: ["Hexágono", "Heptágono", "Octógono", "Nonágono"], ans: "Octógono", ref: "Fácil - Geometria" },
+
+  { q: "Quanto é 10³?", opts: ["100", "300", "1000", "10000"], ans: "1000", ref: "Fácil - Potência" },
+
+  { q: "A terça parte do dobro de 30 é?", opts: ["10", "20", "30", "60"], ans: "20", ref: "Média - Aritmética" },
+
+  { q: "Qual o valor de 2 + 2 * 2?", opts: ["4", "6", "8", "10"], ans: "6", ref: "Fácil - Lógica" },
+
+  { q: "Se o raio de um círculo é 5, qual o diâmetro?", opts: ["2,5", "5", "10", "25"], ans: "10", ref: "Fácil - Geometria" },
+
+  { q: "Quantos milímetros tem 1 metro?", opts: ["10", "100", "1000", "10000"], ans: "1000", ref: "Fácil - Medidas" },
+
+  { q: "O número 17 é?", opts: ["Par", "Composto", "Primo", "Fatorial"], ans: "Primo", ref: "Fácil - Teoria" },
+
+  { q: "Quanto é 100 - 37?", opts: ["53", "63", "73", "83"], ans: "63", ref: "Fácil - Aritmética" },
+
+  { q: "Qual a área de um retângulo de base 10 e altura 5?", opts: ["15", "25", "50", "100"], ans: "50", ref: "Fácil - Geometria" },
+
+  { q: "Se João nasceu em 1990, quantos anos ele faz em 2026?", opts: ["34", "35", "36", "37"], ans: "36", ref: "Fácil - Datas" },
+
+  { q: "Qual a raiz cúbica de 27?", opts: ["3", "9", "13,5", "81"], ans: "3", ref: "Média - Raízes" },
+
+  { q: "Um ângulo de 180° é chamado de?", opts: ["Agudo", "Obtuso", "Raso", "Reto"], ans: "Raso", ref: "Média - Geometria" },
+
+  { q: "Qual o valor de 1/2 + 1/4?", opts: ["1/6", "2/6", "3/4", "1"], ans: "3/4", ref: "Média - Frações" },
+
+  { q: "Se 4x + 2 = 18, qual o valor de x?", opts: ["2", "4", "6", "8"], ans: "4", ref: "Média - Álgebra" },
+
+  { q: "Quantos séculos há em 1000 anos?", opts: ["1", "10", "100", "1000"], ans: "10", ref: "Fácil - Tempo" },
+
+  { q: "Qual o suplemento de um ângulo de 70°?", opts: ["20°", "70°", "110°", "180°"], ans: "110°", ref: "Média - Geometria" },
+
+  { q: "Quanto é 0,1 * 100?", opts: ["1", "10", "100", "0,10"], ans: "10", ref: "Fácil - Aritmética" },
+
+  { q: "Qual o valor de 7! / 6!?", opts: ["1", "6", "7", "42"], ans: "7", ref: "Média - Fatorial" },
+
+  { q: "Em uma caixa de 12 ovos, 1/3 estão quebrados. Quantos estão bons?", opts: ["4", "6", "8", "9"], ans: "8", ref: "Fácil - Fração" },
+
+  { q: "Qual o dobro de 0,75?", opts: ["1,25", "1,50", "1,75", "2,00"], ans: "1,50", ref: "Fácil - Aritmética" },
+
+  { q: "Quantos gramas há em 1,2kg?", opts: ["12", "120", "1200", "12000"], ans: "1200", ref: "Fácil - Medidas" },
+
+  { q: "O número 0 é par ou ímpar?", opts: ["Par", "Ímpar", "Nenhum", "Ambos"], ans: "Par", ref: "Média - Teoria" },
+
+  { q: "Qual a média aritmética de 10, 20 e 30?", opts: ["15", "20", "25", "60"], ans: "20", ref: "Fácil - Estatística" },
+
+  { q: "Quanto é 2 elevado a 0?", opts: ["0", "1", "2", "Infinito"], ans: "1", ref: "Fácil - Potência" },
+
+  { q: "Se um triângulo tem base 6 e altura 4, sua área é?", opts: ["10", "12", "24", "48"], ans: "12", ref: "Média - Geometria" },
+
+  { q: "Qual a negação de 'Alguns alunos passaram'?", opts: ["Nenhum aluno passou", "Todos os alunos passaram", "Muitos alunos passaram", "Alguns alunos não passaram"], ans: "Nenhum aluno passou", ref: "Difícil - Lógica" },
+
+  { q: "Quantas faces tem um tetraedro?", opts: ["3", "4", "5", "6"], ans: "4", ref: "Média - Geometria" }
+
 ];
 
         function App() {
